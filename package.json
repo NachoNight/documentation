@@ -1,0 +1,19 @@
+{
+	"name": "nacho-night-documentation",
+	"version": "1.0.0",
+	"description": "Documentation",
+	"main": "doc/README.md",
+	"scripts": {
+		"dev": "vuepress dev docs",
+		"build": "vuepress build docs",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"NachoNight"
+	],
+	"author": "NachoNight",
+	"license": "ISC",
+	"devDependencies": {
+		"vuepress": "^1.1.0"
+	}
+}
