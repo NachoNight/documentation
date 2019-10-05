@@ -1,3 +1,3 @@
-# Nacho Night
+# Documentation
 
-Coming soon...ish
+[Authenticaton API](/docs/auth)
