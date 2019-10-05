@@ -1,10 +1,10 @@
 # Authentication API
 
----
-
 Resources:
 
 * GitHub Repository: [https://github.com/NachoNight/auth-api](https://github.com/NachoNight/auth-api)
+
+---
 
 # Getting Started:
 
@@ -14,15 +14,20 @@ To run the application, the dependencies listed [here](#dependencies) have to be
 
 Be sure to check the version numbers, to avoid any version-mismatch related errors.
 
+--- 
+
 # Scripts:
 
 * `npm start` - Starts the Node server.
 * `npm run dev` - Starts the Node server using Nodemon, which enables hot reloading on save.
 * `npm test` - Runs the test suite.
+---
 
 # Environmental Variables:
 
 An `.env` file is required in the root directory of the file structure which will contain all the necessary metadata to run the application.
+
+There is an example file included in the repository.
 
 `.env.example`
 
@@ -48,6 +53,8 @@ DISCORD_OAUTH_CLIENT_ID=
 DISCORD_OAUTH_CLIENT_SECRET=
 ```
 
+---
+
 # Dependencies:
 
 * Node.js (v. 10.16.3)
@@ -56,7 +63,11 @@ DISCORD_OAUTH_CLIENT_SECRET=
 * Docker (v. 19.03.2)
 * Docker-compose (v. 1.24.1)
 
+---
+
 # Routes / Endpoints:
+
+* Location: `/app/router.js`
 
 * `GET /` - Loads the root page which should render 'NachoNight Authentication API'
 * `POST /register` - Registers a new user
@@ -75,4 +86,106 @@ DISCORD_OAUTH_CLIENT_SECRET=
 * `GET /auth/google` - Google OAuth endpoint 
 * `GET /auth/google/callback` - Google OAuth handler 
 * `GET /auth/discord` - Discord OAuth endpoint 
-* `GET /auth/discord/callback` - Discord OAuth handler 
+* `GET /auth/discord/callback` - Discord OAuth handler
+
+---
+
+# Configuration:
+
+* Location: `/app/config/index.js`
+
+`/app/config/index.js`
+
+```js
+// Load .env
+require('dotenv').config();
+
+module.exports = {
+  server: {
+    port: process.env.SERVER_PORT || 5000,
+    environment: process.env.NODE_ENV || 'development',
+    secret: process.env.SECRET,
+  },
+  database: {
+    name: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT || 'postgres',
+    port: process.env.DB_PORT || 5432,
+  },
+  mail: {
+    host: process.env.SMTP_HOSTNAME,
+    port: process.env.MAIL_PORT,
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASSWORD,
+    sender: process.env.MAIL_SENDER,
+  },
+  oauth: {
+    google: {
+      clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+    },
+    discord: {
+      clientID: process.env.DISCORD_OAUTH_CLIENT_ID,
+      clientSecret: process.env.DISCORD_OAUTH_CLIENT_SECRET,
+      callbackURL: '/auth/discord/callback',
+    },
+    twitter: {
+      consumerKey: process.env.TWITTER_OAUTH_CONSUMER_KEY,
+      consumerSecret: process.env.TWITTER_OAUTH_CONSUMER_SECRET,
+      callbackURL: '/auth/twitter/callback',
+    },
+  },
+};
+```
+
+### Server:
+
+* `Port` - Server Port
+* `environment` - Current Node environment
+* `secret` - Secret
+
+### Database:
+
+* `name` - Table name
+* `username` - Database username
+* `password` - Password of the database user
+* `host` - Current hostname of the server hosting the database
+* `dialect` - Name of the DBMS. By default it falls back to Postgres if nothing is provided
+* `port` - Port on which the database is running on
+
+### Mail:
+
+* `host` - SMTP hostname 
+* `port` - SMTP port. The default port should be 587
+* `user` - Mailgun user credentials 
+* `pass` - Password of the mailgun user
+* `sender` - The email which will be used to send emails to users
+
+### OAuth:
+
+##### Google and Discord:
+
+* `clientID` - OAuth client ID
+* `clientSecret` - OAuth client secret
+
+##### Twitter:
+
+* `consumerKey` - Twitter API consumer key
+* `consumerSecret` - Twitter API consumer secret
+
+##### Shared:
+ 
+* `callbackURL` - OAuth registration/login handler
+
+---
+
+# Database:
+
+To interact with the database, we are using the Sequelize package.
+
+The `Sequelize` constructor requires a database user and password, table name and a port to establish a connection.
+
+All the information is provided by the [configuration](#configuration) which is constructed by the [envirnonmental variables](#environmental-variables)
