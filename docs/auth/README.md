@@ -56,3 +56,23 @@ DISCORD_OAUTH_CLIENT_SECRET=
 * Docker (v. 19.03.2)
 * Docker-compose (v. 1.24.1)
 
+# Routes / Endpoints:
+
+* `GET /` - Loads the root page which should render 'NachoNight Authentication API'
+* `POST /register` - Registers a new user
+* `GET /send-verification` - Sends out a verification email
+* `GET /verify-account/:token` - Account verification handler
+* `POST /login` - Login endpoint
+* `GET /current` - Get the current user data
+* `DELETE /delete` - Delete the account of the current user
+* `PATCH /forgot` - Sends out an email for password recovery
+* `PUT /recover/:token` - Password recovery handler
+* `PUT /change-email` - Requests an email change and sends out an email to the new address
+* `GET /verify-email-change/:token` - Email change handler
+* `PUT /change-password` - Password change handler
+* `POST /add-address` - Email collection handler
+* `DELETE /remove-address` - Removes email from our collection
+* `GET /auth/google` - Google OAuth endpoint 
+* `GET /auth/google/callback` - Google OAuth handler 
+* `GET /auth/discord` - Discord OAuth endpoint 
+* `GET /auth/discord/callback` - Discord OAuth handler 
