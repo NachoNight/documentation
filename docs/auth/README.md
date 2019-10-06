@@ -10,6 +10,7 @@ Resources:
 - Nodemailer: [https://npmjs.com/package/nodemailer/](https://npmjs.com/package/nodemailer/)
 - Mailgun: [https://www.mailgun.com/](https://www.mailgun.com/)
 - EJS: [https://ejs.co/](https://ejs.co/)
+- Axios: [https://www.npmjs.com/package/axios](https://www.npmjs.com/package/axios)
 
 ---
 
@@ -358,3 +359,213 @@ Templates are written in [EJS](https://ejs.co/) which get rendered as HTML and s
   </body>
 </html>
 ```
+
+---
+
+# Functions:
+
+There are a few functions that have been written to avoid repetition. They are located in the `/app/functions` folder.
+
+- `addStrategy` - Adds a strategy to Passport
+- `determineCredentials` - Determines which credentials are required for which path
+- `generateRandomBytes` - Generates a 256 bit long string
+- `generateToken` - Generates and signs a JSON web token
+- `pathRequiresUser` - Checks if the current endpoint requires authentication
+- `registerUser` - Registers a new user
+
+---
+
+# Middleware:
+
+The server and most endpoints run middleware.
+
+The server middleware application is bootstrapped into a single function exported from `/app/middleware/index.js`.
+
+`/app/middleware/index.js`
+
+```js
+const { json, urlencoded } = require("body-parser");
+const session = require("express-session");
+const { secret } = require("../config").server;
+const logger = require("./logger");
+
+module.exports = app => {
+  app.use(json());
+  app.use(urlencoded({ extended: true }));
+  app.use(session({ secret, resave: true, saveUninitialized: true }));
+  logger(app);
+};
+```
+
+The other middleware is located in the same folder. Here's a list:
+
+- `checkForUser` - Checks if the user making the request exists
+- `checkIfBanned` - Checks if the user making the request is banned
+- `logger` - Initializes the logging middleware
+- `validateInput` - Input validation handler
+
+---
+
+# Utilities:
+
+Currently, we are only running one utility function which is used for testing endpoints in our test suite.
+
+`apiTestingUtility`, located in `/app/utils`, is an [Axios](https://www.npmjs.com/package/axios) instance which calls the various API routes in the `test.test.js` file located in `/app/test`.
+
+`/app/utils/apiTestingUtility.js`
+
+```js
+const axios = require("axios");
+const { port } = require("../config").server;
+
+module.exports = async (method, endpoint, data = null, token = "") => {
+  axios.defaults.headers.common.Authorization = token;
+  const res = await axios[method](`http://localhost:${port}${endpoint}`, data);
+  return {
+    status: res.status,
+    data: res.data
+  };
+};
+```
+
+---
+
+# Input Validation:
+
+Located in `/app/validation` are the validation methods and module we use for checking provided inputs and sanitization.
+
+The method naming convention tries to resemble the route endpoint names as much as possible to ensure that the `validateInput` middleware can call it.
+
+We will not cover the methods here, so if you are interested to see how they work, you can take a look in the [GitHub repository](https://github.com/NachoNight/auth-api).
+
+---
+
+# Requests:
+
+`GET /`
+
+Input: None
+
+Requires authentication: false
+
+Response: NachoNight Authentication API
+
+---
+
+`POST /register`
+
+Example input:
+
+```json
+{
+  "email": "test@example.com",
+  "password": "test12345",
+  "confirmPassword": "test12345"
+}
+```
+
+Requires authentication: false
+
+Example response:
+
+```json
+{
+  "verified": false,
+  "banned": false,
+  "created": "2019-10-06T11:49:06.189Z",
+  "clientID": "d0a8a9a4-af9a-4e0c-9dbd-80209ce48267",
+  "id": 1,
+  "email": "test@example.com",
+  "password": "$2b$14$2PGckwtaM9NL3LLPdSZgrOAXJ.hQ5D0wLapO9iAGbXHTydgV.3yYi",
+  "updatedAt": "2019-10-06T11:49:06.190Z",
+  "createdAt": "2019-10-06T11:49:06.190Z"
+}
+```
+
+---
+
+`GET /send-verification`
+
+Input: None
+
+Requires authentication: true
+
+Example response:
+
+```json
+{
+  "verified": false,
+  "banned": false,
+  "created": "2019-10-06T11:49:06.189Z",
+  "clientID": "d0a8a9a4-af9a-4e0c-9dbd-80209ce48267",
+  "id": 1,
+  "email": "test@example.com",
+  "password": "$2b$14$2PGckwtaM9NL3LLPdSZgrOAXJ.hQ5D0wLapO9iAGbXHTydgV.3yYi",
+  "updatedAt": "2019-10-06T11:49:06.190Z",
+  "createdAt": "2019-10-06T11:49:06.190Z"
+}
+```
+
+---
+
+`GET /verify-account/:token`
+
+Input: none
+
+Requires authentication: false
+
+Example response:
+
+```json
+{
+  "verified": true,
+  "banned": false,
+  "created": "2019-10-06T11:49:06.189Z",
+  "clientID": "d0a8a9a4-af9a-4e0c-9dbd-80209ce48267",
+  "id": 1,
+  "email": "test@example.com",
+  "password": "$2b$14$2PGckwtaM9NL3LLPdSZgrOAXJ.hQ5D0wLapO9iAGbXHTydgV.3yYi",
+  "updatedAt": "2019-10-06T11:49:06.190Z",
+  "createdAt": "2019-10-06T11:49:06.190Z"
+}
+```
+
+---
+
+`GET /current`
+
+Input: none
+
+Requires authentication: true
+
+Example response:
+
+```json
+{
+  "id": 1,
+  "email": "test@example.com",
+  "verified": false,
+  "banned": false,
+  "clientID": "d0a8a9a4-af9a-4e0c-9dbd-80209ce48267",
+  "created": "2019-10-06T11:49:06.189Z"
+}
+```
+
+---
+
+`DELETE /delete`
+
+Input: none
+
+Requires authentication: true
+
+Example response:
+
+```json
+{
+  "deleted": true,
+  "timestamp": 1570363123168
+}
+```
+
+---
