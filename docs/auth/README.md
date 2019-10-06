@@ -3,6 +3,13 @@
 Resources:
 
 - GitHub Repository: [https://github.com/NachoNight/auth-api](https://github.com/NachoNight/auth-api)
+- Sequelize: [https://sequelize.org/](https://sequelize.org/)
+- JSON Web Token: [https://jwt.io/](https://jwt.io/)
+- OAuth: [https://oauth.net/](https://oauth.net/)
+- node-cache: [https://npmjs.com/package/node-cache/](https://npmjs.com/package/node-cache/)
+- Nodemailer: [https://npmjs.com/package/nodemailer/](https://npmjs.com/package/nodemailer/)
+- Mailgun: [https://www.mailgun.com/](https://www.mailgun.com/)
+- EJS: [https://ejs.co/](https://ejs.co/)
 
 ---
 
@@ -93,12 +100,9 @@ DISCORD_OAUTH_CLIENT_SECRET=
 
 # Configuration:
 
-- Location: `/app/config/index.js`
-
 `/app/config/index.js`
 
 ```js
-// Load .env
 require("dotenv").config();
 
 module.exports = {
@@ -185,7 +189,7 @@ module.exports = {
 
 # Database:
 
-To interact with the database, we are using the Sequelize package.
+To interact with the database, we are using [Sequelize](https://sequelize.org/).
 
 The `Sequelize` constructor requires a database user and password, table name and a port to establish a connection.
 
@@ -223,6 +227,17 @@ const connect = () => {
 module.exports = connect();
 ```
 
+### Models:
+
+At this time, only two models are in use:
+
+- `email-address.model.js` - Email address model
+- `user.model.js` - User model
+
+These models are used for communicating with the database rather than having to use SQL queries.
+
+You can find them in `/app/db/models`.
+
 ---
 
 # Authentication:
@@ -252,3 +267,94 @@ If there's no user in the database, the strategy just errors out and an 404 is s
 OAuth, on the other hand, finds or creates a new user. If the user exists, it will trigger a redirect to the previously mentioned callback URL. Otherwise, it will just create a new user.
 
 You can take a look in how the authentication system works by looking at the `addStrategy` function located in `/app/functions/`.
+
+---
+
+# Caching:
+
+Our current cache setup runs in server memory using the [node-cache](https://www.npmjs.com/package/node-cache) module, rather than in a Redis instance or in any other solution which would be decoupled from the server. Currently, this is working fine, but in the future, we might change this due to data persistence if the sever crashes, etc.
+
+The main purpose of the caching system is to temporarily hold password recovery and email verification tokens. This is a better solution that to actually store the tokens in the database itself.
+
+The standard TTL (time to live) for keys in the cache is one hour (3600 seconds), and an automated check to remove dead keys is ran every 5 minutes (300 seconds).
+
+---
+
+# Mailing system:
+
+For sending out emails, we are using [Nodemailer](https://www.npmjs.com/package/nodemailer).
+
+This solution was a no-brainer since the package is really easy to use, and it is a good performer.
+
+You will need to provide your own SMTP credentials in the `.env` file for it to work.
+
+The service we are using for testing is [Mailgun](https://www.mailgun.com/email-api), which has an amazing free tier.
+
+That said, you do need to provide a list of authorized recipients when using a free account, otherwise you will be getting errors.
+
+`/app/mail/index.js`
+
+```js
+const { createTransport } = require("nodemailer");
+const { renderFile } = require("ejs");
+const { join } = require("path");
+const { host, port, user, pass, sender } = require("../config").mail;
+
+const transport = createTransport({
+  host,
+  port,
+  secure: false,
+  auth: {
+    user,
+    pass
+  }
+});
+
+module.exports = (to, subject, text, template = "sample") => {
+  const config = {
+    from: sender,
+    to,
+    subject
+  };
+  renderFile(
+    join(__dirname, `/templates/${template}.ejs`),
+    { ...config, body: text },
+    async (err, data) => {
+      if (err) throw err;
+      await transport.sendMail(
+        {
+          ...config,
+          html: data
+        },
+        error => {
+          if (error) {
+            console.error(`Email could not be sent to ${to}`);
+          } else {
+            console.log(`Email sent to ${to}`);
+          }
+        }
+      );
+    }
+  );
+};
+```
+
+### Templates:
+
+Templates are written in [EJS](https://ejs.co/) which get rendered as HTML and sent over to the recipient.
+
+`/app/mail/templates/sample.ejs`
+
+```js
+<html>
+  <body>
+    <h1>NachoNight</h1>
+    <p>From: <%= from %></p>
+    <p>To: <%= to %></p>
+    <p>Subject: <%= subject %></p>
+    <div>
+      <%= body %>
+    </div>
+  </body>
+</html>
+```
