@@ -49,6 +49,7 @@
     - [Register](#register)
     - [Send verification email](#send-verification-email)
     - [Verify account](#verify-account)
+    - [Login](#login)
     - [Get current user](#get-current-user)
     - [Delete current user](#delete-current-user)
     - [Password recovery](#password-recovery)
@@ -505,13 +506,15 @@ Response: NachoNight Authentication API
 
 `POST /register`
 
+> Register a new user.
+
 Example input:
 
 ```json
 {
   "email": "test@example.com",
   "password": "test12345",
-  "confirmPassword": "test12345"
+  "confirmpassword": "test12345"
 }
 ```
 
@@ -539,6 +542,8 @@ Example response:
 
 `GET /send-verification`
 
+> Send out an account verification email.
+
 Input: None
 
 Requires authentication: true
@@ -565,6 +570,8 @@ Example response:
 
 `GET /verify-account/:token`
 
+> Authorizes account verification.
+
 Input: none
 
 Requires authentication: false
@@ -587,9 +594,39 @@ Example response:
 
 ---
 
+### Login
+
+`POST /login`
+
+> Returns the bearer token used for authorizing requests.
+
+Example input:
+
+```json
+{
+  "email": "test@example.com",
+  "password": "test12345"
+}
+```
+
+Requires authentication: false
+
+Example response:
+
+```json
+{
+  "loggedIn": true,
+  "token": "Bearer eyJhbGciOkLIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJkZW5pc19vbmRlckBwcm90b25tYWlsLmNvbSIsInZlcmlmaWVkIjpmYWxzZSwiYmFubmVkIjpmYWxzZSwiY2xpZW50SUQiOiJkMGE4YTlhNC1hZjlhLTRRiZC04MDIwOWNlNDgyNjciLCJjcmVhdGVkIjoiMjAxOS0xMC0wNlQxMTo0OTowNi4xODlayhltnbcIiwiaWF0IjoxNTcwNDQxNTI2LCJleHAiOjE1NzA0NDUxMjZ9.Sp5KdA-oUXhMwVUOl5-OgZXzVUIOwyjkYeGDiAzZJI"
+}
+```
+
+---
+
 ### Get current user
 
 `GET /current`
+
+> Returns a payload containing the currently logged in user's data.
 
 Input: none
 
@@ -614,6 +651,8 @@ Example response:
 
 `DELETE /delete`
 
+> Deletes the current user, and sends out a timestamp.
+
 Input: none
 
 Requires authentication: true
@@ -632,6 +671,8 @@ Example response:
 ### Password recovery
 
 `PATCH /forgot`
+
+> Initializes the password recovery. An email will be sent out for confirmation.
 
 Example input:
 
@@ -656,6 +697,8 @@ Response:
 ### Restore password
 
 `PATCH /recover/:token`
+
+> Authorizes the password restoration.
 
 Input: none
 
@@ -683,6 +726,8 @@ Example response:
 
 `PUT /change-email`
 
+> Request an email change. A verification email will be sent out to the updated email address.
+
 Example input:
 
 ```json
@@ -706,6 +751,8 @@ Example response:
 ### Verify email change
 
 `GET /verify-email-change/:token`
+
+> Checks if the token provided in the email is valid. If it is, change the email address.
 
 Input: none
 
@@ -732,6 +779,8 @@ Example response:
 ### Change password
 
 `PUT /change-password`
+
+> Hashes the new password and sets it to the user object.
 
 Example input:
 
@@ -766,6 +815,8 @@ Example response:
 
 `POST /add-address`
 
+> Adds an email address to our collection to be used for newsletter, etc...
+
 Example input:
 
 ```json
@@ -789,6 +840,8 @@ Output:
 ### Remove email from collection
 
 `DELETE /remove-address`
+
+> Checks the provided email address against the database. If it's in there, delete it.
 
 Example input:
 
