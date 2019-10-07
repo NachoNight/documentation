@@ -1,3 +1,6 @@
+---
+  sidebar: auto
+---
 # Authentication API
 
 ### Resources:
@@ -16,7 +19,7 @@
 
 ### Navigation:
 
-- [Authentication API](#authentication-api)
+<!-- - [Authentication API](#authentication-api)
     - [Resources:](#resources)
     - [Navigation:](#navigation)
 - [Getting Started:](#getting-started)
@@ -58,11 +61,10 @@
     - [Verify email change](#verify-email-change)
     - [Change password](#change-password)
     - [Add email to collection](#add-email-to-collection)
-    - [Remove email from collection](#remove-email-from-collection)
+    - [Remove email from collection](#remove-email-from-collection) -->
 
 ---
-
-# Getting Started:
+## Getting Started
 
 Let's get started, shall we!
 
@@ -72,7 +74,7 @@ Be sure to check the version numbers, to avoid any version-mismatch related erro
 
 ---
 
-# Scripts:
+### Scripts
 
 - `npm start` - Starts the Node server.
 - `npm run dev` - Starts the Node server using Nodemon, which enables hot reloading on save.
@@ -80,7 +82,7 @@ Be sure to check the version numbers, to avoid any version-mismatch related erro
 
 ---
 
-# Environmental Variables:
+### Environmental Variables
 
 An `.env` file is required in the root directory of the file structure which will contain all the necessary metadata to run the application.
 
@@ -122,7 +124,7 @@ DISCORD_OAUTH_CLIENT_SECRET=
 
 ---
 
-# Routes / Endpoints:
+## Routes / Endpoints:
 
 - Location: `/app/router.js`
 

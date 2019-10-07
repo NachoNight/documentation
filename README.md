@@ -1,5 +1,5 @@
 # Nacho Night
 
-![Logo](./assets/logo.png "Logo")
+![Logo](./docs/public/img/logo.png "Logo")
 
 ### Click [here](/docs) to get started!
