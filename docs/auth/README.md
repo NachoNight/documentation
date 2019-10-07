@@ -569,3 +569,168 @@ Example response:
 ```
 
 ---
+
+`PATCH /forgot`
+
+Example input:
+
+```json
+{
+  "email": "test@example.com"
+}
+```
+
+Requires authentication: false
+
+Response:
+
+```json
+{
+  "initiatedPasswordRecovery": true
+}
+```
+
+---
+
+`PATCH /recover/:token`
+
+Input: none
+
+Requires authentication: false
+
+Example response:
+
+```json
+{
+  "verified": true,
+  "banned": false,
+  "created": "2019-10-06T11:49:06.189Z",
+  "clientID": "d0a8a9a4-af9a-4e0c-9dbd-80209ce48267",
+  "id": 1,
+  "email": "test@example.com",
+  "password": "$2b$14$2PGckwtaM9NL3dfasfAwOLpaHHfglasgrOAXJ.hQ5D0wLapO9iAGbXHTydgV.3yYi",
+  "updatedAt": "2019-10-06T11:49:06.190Z",
+  "createdAt": "2019-10-06T11:49:06.190Z"
+}
+```
+
+---
+
+`PUT /change-email`
+
+Example input:
+
+```json
+{
+  "email": "edited_email@example.com"
+}
+```
+
+Requires authentication: true
+
+Example response:
+
+```json
+{
+  "initiatedEmailChange": true
+}
+```
+
+---
+
+`GET /verify-email-change/:token`
+
+Input: none
+
+Requires authentication: false
+
+Example response:
+
+```json
+{
+  "verified": true,
+  "banned": false,
+  "created": "2019-10-06T11:49:06.189Z",
+  "clientID": "d0a8a9a4-af9a-4e0c-9dbd-80209ce48267",
+  "id": 1,
+  "email": "edited_email@example.com",
+  "password": "$2b$14$2PGckwtaM9NL3dfasfAwOLpaHHfglasgrOAXJ.hQ5D0wLapO9iAGbXHTydgV.3yYi",
+  "updatedAt": "2019-10-06T11:49:06.190Z",
+  "createdAt": "2019-10-06T11:49:06.190Z"
+}
+```
+
+`PUT /change-password`
+
+Example input:
+
+```json
+{
+  "password": "12345test",
+  "confirmPassword": "12345test"
+}
+```
+
+Requires authentication: true
+
+Example response:
+
+```json
+{
+  "verified": true,
+  "banned": false,
+  "created": "2019-10-06T11:49:06.189Z",
+  "clientID": "d0a8a9a4-af9a-4e0c-9dbd-80209ce48267",
+  "id": 1,
+  "email": "edited_email@example.com",
+  "password": "$2b$14$2PGcasch124HGFHazorGprOAXJ.hQ5D0wLapO9iAGbXHTydgV.a4Y5",
+  "updatedAt": "2019-10-06T11:49:06.190Z",
+  "createdAt": "2019-10-06T11:49:06.190Z"
+}
+```
+
+---
+
+`POST /add-address`
+
+Example input:
+
+```json
+{
+  "email": "account@test.com"
+}
+```
+
+Requires authentication: false
+
+Output:
+
+```json
+{
+  "action": "created"
+}
+```
+
+---
+
+`DELETE /remove-address`
+
+Example input:
+
+```json
+{
+  "email": "account@test.com"
+}
+```
+
+Requires authentication: false
+
+Output:
+
+```json
+{
+  "action": "deleted"
+}
+```
+
+---
