@@ -1,3 +1,5 @@
 # Documentation
 
-[Authenticaton API](/docs/auth)
+### Table of contents:
+
+- [Authenticaton API](/docs/auth)
