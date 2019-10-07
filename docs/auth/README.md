@@ -1,6 +1,6 @@
 # Authentication API
 
-Resources:
+### Resources:
 
 - GitHub Repository: [https://github.com/NachoNight/auth-api](https://github.com/NachoNight/auth-api)
 - Sequelize: [https://sequelize.org/](https://sequelize.org/)
@@ -11,6 +11,53 @@ Resources:
 - Mailgun: [https://www.mailgun.com/](https://www.mailgun.com/)
 - EJS: [https://ejs.co/](https://ejs.co/)
 - Axios: [https://www.npmjs.com/package/axios](https://www.npmjs.com/package/axios)
+
+---
+
+### Navigation:
+
+- [Authentication API](#authentication-api)
+    - [Resources:](#resources)
+    - [Navigation:](#navigation)
+- [Getting Started:](#getting-started)
+- [Scripts:](#scripts)
+- [Environmental Variables:](#environmental-variables)
+- [Dependencies:](#dependencies)
+- [Routes / Endpoints:](#routes--endpoints)
+- [Configuration:](#configuration)
+    - [Server:](#server)
+    - [Database:](#database)
+    - [Mail:](#mail)
+    - [OAuth:](#oauth)
+        - [Google and Discord:](#google-and-discord)
+        - [Twitter:](#twitter)
+        - [Shared:](#shared)
+- [Database:](#database-1)
+    - [Models:](#models)
+- [Authentication:](#authentication)
+    - [OAuth providers:](#oauth-providers)
+    - [Usage:](#usage)
+- [Caching:](#caching)
+- [Mailing system:](#mailing-system)
+    - [Templates:](#templates)
+- [Functions:](#functions)
+- [Middleware:](#middleware)
+- [Utilities:](#utilities)
+- [Input validation:](#input-validation)
+- [Requests:](#requests)
+    - [Root](#root)
+    - [Register](#register)
+    - [Send verification email](#send-verification-email)
+    - [Verify account](#verify-account)
+    - [Get current user](#get-current-user)
+    - [Delete current user](#delete-current-user)
+    - [Password recovery](#password-recovery)
+    - [Restore password](#restore-password)
+    - [Change email](#change-email)
+    - [Verify email change](#verify-email-change)
+    - [Change password](#change-password)
+    - [Add email to collection](#add-email-to-collection)
+    - [Remove email from collection](#remove-email-from-collection)
 
 ---
 
@@ -430,7 +477,7 @@ module.exports = async (method, endpoint, data = null, token = "") => {
 
 ---
 
-# Input Validation:
+# Input validation:
 
 Located in `/app/validation` are the validation methods and module we use for checking provided inputs and sanitization.
 
