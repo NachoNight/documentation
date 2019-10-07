@@ -442,6 +442,8 @@ We will not cover the methods here, so if you are interested to see how they wor
 
 # Requests:
 
+### Root
+
 `GET /`
 
 Input: None
@@ -451,6 +453,8 @@ Requires authentication: false
 Response: NachoNight Authentication API
 
 ---
+
+### Register
 
 `POST /register`
 
@@ -484,6 +488,8 @@ Example response:
 
 ---
 
+### Send verification email
+
 `GET /send-verification`
 
 Input: None
@@ -507,6 +513,8 @@ Example response:
 ```
 
 ---
+
+### Verify account
 
 `GET /verify-account/:token`
 
@@ -532,6 +540,8 @@ Example response:
 
 ---
 
+### Get current user
+
 `GET /current`
 
 Input: none
@@ -553,6 +563,8 @@ Example response:
 
 ---
 
+### Delete current user
+
 `DELETE /delete`
 
 Input: none
@@ -569,6 +581,8 @@ Example response:
 ```
 
 ---
+
+### Password recovery
 
 `PATCH /forgot`
 
@@ -591,6 +605,8 @@ Response:
 ```
 
 ---
+
+### Restore password
 
 `PATCH /recover/:token`
 
@@ -616,6 +632,8 @@ Example response:
 
 ---
 
+### Change email
+
 `PUT /change-email`
 
 Example input:
@@ -638,6 +656,8 @@ Example response:
 
 ---
 
+### Verify email change
+
 `GET /verify-email-change/:token`
 
 Input: none
@@ -659,6 +679,10 @@ Example response:
   "createdAt": "2019-10-06T11:49:06.190Z"
 }
 ```
+
+---
+
+### Change password
 
 `PUT /change-password`
 
@@ -691,6 +715,8 @@ Example response:
 
 ---
 
+### Add email to collection
+
 `POST /add-address`
 
 Example input:
@@ -712,6 +738,8 @@ Output:
 ```
 
 ---
+
+### Remove email from collection
 
 `DELETE /remove-address`
 
